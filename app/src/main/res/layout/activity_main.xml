@@ -15,10 +15,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Click Me!" />
-
-    <Button
-        android:id="@+id/hide"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Don't Click Me!" />
 </LinearLayout>
