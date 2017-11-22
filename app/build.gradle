@@ -1,11 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 
+jacoco {
+    toolVersion = '0.7.4.201502262128'
+}
+
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.artem.mytest2"
-        minSdkVersion 19
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -25,33 +29,29 @@ android {
     }
 
     testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
+        animationsDisabled true
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+
+        unitTests {
+            includeAndroidResources = true
         }
     }
 }
-
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     group = "reporting"
-
     reports {
         xml.enabled = true
         html.enabled = true
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
 
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
-    executionData = fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec",
-            "outputs/code-coverage/connected/*.ec"
-//                "*.exec",
-//                "*.ec"
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
     ])
 }
 
