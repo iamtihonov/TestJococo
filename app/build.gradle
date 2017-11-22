@@ -34,6 +34,7 @@ android {
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+    group = "reporting"
 
     reports {
         xml.enabled = true
@@ -48,7 +49,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     classDirectories = files([debugTree])
     executionData = fileTree(dir: "$buildDir", includes: [
             "jacoco/testDebugUnitTest.exec",
-            "outputs/code-coverage/connected/SM-A520F - 7.0-coverage.ec"
+            "outputs/code-coverage/connected/*.ec"
 //                "*.exec",
 //                "*.ec"
     ])
